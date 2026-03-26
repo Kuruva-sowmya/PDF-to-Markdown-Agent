@@ -1,1 +1,0 @@
-{{pdf_text_extractor_output}}
