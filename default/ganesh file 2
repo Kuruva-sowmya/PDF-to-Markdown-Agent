@@ -1,0 +1,25 @@
+Source tag : 1449234245_173e1720fc4c405abe57b6d4ecac9b5b-080426-1025-146 (1).pdf
+Note : This extracted file is generated from SharePoint or Wiki content. If the source document contains images, charts, or graphical elements, they may not be fully converted into Markdown format. For complete clarity, please refer to the original source using the source tag provided above.
+
+# Bronze++
+
+Bronze++ data product consumes data from 4 archive buckets of bronze.
+
+The 4 archive buckets are listed below:
+
+- **DEV:** project - 0001, account - account=0(.+)$
+- **ITG:** project - 0002, account - account==0(.+)$
+- **PROD:** project - 0001, account - account==5(.+)$
+
+## Archive Bucket Path
+
+| Type                | S3 Path                                                                                       |
+|---------------------|----------------------------------------------------------------------------------------------|
+| events              | s3://cscranalytics-prod-archive/cdm/v1.0/events/{originatorGun}/{eventGun}/{account}/project={project} |
+| posts               | s3://cscranalytics-prod-archive/cdm/v1.0/posts/{originatorGun}/{eventGun}/{account}/project={project}  |
+| originatorContextPath | s3://cscranalytics-prod-archive/cdm/v1.0/originatorContext/{originatorGun}/{eventGun}/{account/project={project} |
+| privacy             | s3://cscranalytics-prod-archive/cdm/v1.0/privacy/{originatorGun}/{eventGun}/{account}/project={project} |
+
+Databricks job loads data into Bronze++ unity catalog where managed tables point to s3 buckets of dataos-{env}-one-cloud-shared buckets.
+
+Firmware originators (FW): Imagingdevice, SOL-Sirius On Linux (service eventing, domain eventing).
