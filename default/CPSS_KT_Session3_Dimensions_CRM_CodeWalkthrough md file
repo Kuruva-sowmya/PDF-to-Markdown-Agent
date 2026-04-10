@@ -1,0 +1,432 @@
+Source tag : https://rndwiki.inc.hpicorp.net/confluence/spaces/CSSBI/pages/1267585636/DataOS+Training+Helpful+Links
+Note : This extracted file is generated from SharePoint or Wiki content. If the source document contains images, charts, or graphical elements, they may not be fully converted into Markdown format. For complete clarity, please refer to the original source using the source tag provided above.
+
+# CPSS Data Engineering KT Session 3 — Dimensions, CRM, Dependency Graph & Code Walkthrough
+
+## allinplan_sub_base_ts Pipeline Deep Dive
+
+---
+
+## Table of Contents
+
+1. [Session 3 Overview](#session-3-overview)
+   - [Session Agenda](#session-agenda)
+2. [Dimensions, CRM and Other Pipelines](#dimensions-crm-and-other-pipelines)
+   - [Job 15 - hpone_device_dimension](#job-15---hpone_device_dimension)
+   - [Job 16 - allinplan_crm](#job-16---allinplan_crm)
+   - [Job 17 - allinplan_device_claims](#job-17---allinplan_device_claims)
+   - [Job 18 - allinplan_address_check](#job-18---allinplan_address_check)
+3. [Additional Pipelines - Shipment Tracker and Jump IDs](#additional-pipelines---shipment-tracker-and-jump-ids)
+   - [Shipment Tracker](#shipment-tracker)
+   - [paas_jumpid (Jump ID Dimension)](#paas_jumpid-jump-id-dimension)
+4. [HP One Dependency Graph](#hp-one-dependency-graph)
+   - [Full Dependency Graph](#full-dependency-graph)
+   - [Deprecation Status](#deprecation-status)
+5. [Data Storage Strategy and Retention](#data-storage-strategy-and-retention)
+   - [Current Storage Tier](#current-storage-tier)
+   - [Delta Transaction Retention](#delta-transaction-retention)
+6. [Code Walkthrough - allinplan_sub_base_ts](#code-walkthrough---allinplan_sub_base_ts)
+   - [Pipeline Overview](#pipeline-overview)
+   - [Cell-by-Cell Structure](#cell-by-cell-structure)
+7. [Key Engineering Patterns from the Code Walkthrough](#key-engineering-patterns-from-the-code-walkthrough)
+   - [Lazy Evaluation and Action Calls](#lazy-evaluation-and-action-calls)
+   - [Persist vs Cache](#persist-vs-cache)
+   - [Window Functions](#window-functions)
+   - [Schema Evolution and overwriteSchema](#schema-evolution-and-overwriteschema)
+   - [Code Quality Notes (Items for Future Cleanup)](#code-quality-notes-items-for-future-cleanup)
+8. [Access, Onboarding and Next Steps](#access-onboarding-and-next-steps)
+   - [Access Status](#access-status)
+   - [MTP Checklist](#mtp-checklist)
+9. [New Terms from Session 3](#new-terms-from-session-3)
+
+---
+
+## 1. Session 3 Overview
+
+This document covers KT Session 3, which completed the remaining pipeline overview slides from Session 2 and conducted a detailed code walkthrough of the allinplan_sub_base_ts pipeline - the central fact table for All-In-Plan. The session also covered the HP One Dependency Graph, Dimensions, CRM, and other supporting data products.
+
+### 1.1 Session Agenda
+
+1. Complete remaining slides from Session 2: Dimensions, CRM and Other pipelines
+2. HP One Dependency Graph - full table dependency map
+3. Data storage strategy and retention policy
+4. Code walkthrough: allinplan_sub_base_ts pipeline (cell by cell)
+5. Access and onboarding status discussion
+6. Next session planning
+
+> Note: HP One, Pass and All-In-Plan are the same program. Different teams and different eras of code use different names. The current official name is HP All-In-Plan.
+
+---
+
+## 2. Dimensions, CRM and Other Pipelines
+
+These are the supporting pipelines that feed dimensional and reference data into the core AIP fact tables. They are not directly queried by downstream dashboards, but they are referenced inside almost every pipeline job.
+
+| #  | Job Name                  | Entry File                          | Target Table(s)                                   | Description                                                                                       |
+|----|---------------------------|-------------------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| 15 | hpone_device_dimension    | device_dimension/device_dimension.py| gold_hpallinone_pii.device_dimension              | Device dimension combining sub base, product ref, ink/paper orders, and RTP data.                 |
+| 16 | allinplan_crm             | allinplan_crm.py                    | gold_hpallinone_pii.allinplan_crm                 | CRM email activity (SFMC send/open/click/bounce) for AIP subscribers.                             |
+| 17 | allinplan_device_claims   | allinplan_device_claims.py          | gold_hpallinone_pii.allinplan_successful_sw_device_claims | Device claim events (bronze→silver→gold).                                                         |
+| 18 | allinplan_address_check   | allinone_address_mapping.py         | gold_hpallinone.allinplan_address_check           | Fraud detection — identifies linked tenants via address normalisation + self-joins.               |
+
+### 2.1 Job 15 - hpone_device_dimension
+
+- **Purpose:** Device-level dimensional table for every AIP-enrolled printer. Combines data from the subscription base, product reference tables, ink/paper order data, and RTP (Real-Time Print) telemetry.
+- **Contains:** Serial number, product SKU, model name, AIP eligibility, Instant Ink enrollment flag, Origami enrollment flag, and device-level subscription attributes.
+- **Scope:** Device-level, not user-level. Only printers enrolled and eligible for AIP appear here.
+- **Usage:** Referenced in validations across other pipelines to confirm printer eligibility, join device attributes to subscription records, and track printer replacement history.
+
+### 2.2 Job 16 - allinplan_crm
+
+- **Purpose:** Captures HP's email marketing activity for AIP subscribers from SFMC (Salesforce Marketing Cloud). Tracks every email HP sends to a subscriber - sent, opened, clicked, or bounced.
+- **Business context:** HP's CRM team actively works on customer retention. They send targeted emails to subscribers - for example, 20 days before a 3-month trial ends, HP emails the customer with custom plan options. This pipeline captures whether that email was received and acted upon.
+- **Downstream use:** Used to understand whether CRM campaigns are effective. Combined with subscription events to track whether an email led to a conversion, renewal, or upgrade.
+
+### 2.3 Job 17 - allinplan_device_claims
+
+- **Purpose:** Captures device claim events - the moment a subscriber actually sets up and activates their printer after receiving it.
+- **What is a device claim:** After subscribing to AIP, a printer is shipped. The device is not claimed until the customer physically sets it up, connects it, and the printer starts sending telemetry. The claim event is the activation trigger.
+- **Architecture:** Bronze → Silver → Gold. Data sourced from the same upstream CDM system but refined at a grain suitable for factual data products to use.
+- **Usage:** Referenced in the allinplan_sub_base_ts pipeline to track whether a subscriber has actually activated their device after subscription.
+
+### 2.4 Job 18 - allinplan_address_check
+
+- **Purpose:** Fraud detection pipeline. Identifies customers linked to multiple subscriptions or addresses that should not co-exist under business rules.
+- **How it works:** One tenant (subscriber) should be tied to one subscription address. This pipeline validates that rule using address normalisation and self-joins. If a user appears to be subscribed to overlapping plans that are technically mutually exclusive, this pipeline flags it.
+- **Use case:** Fraudulent URL campaigns may create duplicate or invalid subscriptions. Address check ensures HP is using the correct, validated address for each customer and detects anomalies.
+
+> Note: The device_claims and address_check tables are not queried directly by dashboards, but they are referenced inside the allinplan_sub_base_ts pipeline for joins and validations.
+
+---
+
+## 3. Additional Pipelines - Shipment Tracker and Jump IDs
+
+### 3.1 Shipment Tracker
+
+- **Purpose:** Tracks real-time shipment status by making API calls to individual shipping carriers - FedEx, DHL, UPS, USPS, and others.
+- **Ownership:** This is an upstream job bounded by CPSS. The source data comes from carrier APIs. The CPSS team owns the pipeline that ingests and transforms the carrier responses.
+- **Frequency of work:** Not a daily working table, but you will receive periodic requests to update or fix the shipment tracker pipeline.
+
+### 3.2 paas_jumpid (Jump ID Dimension)
+
+- **What is a Jump ID:** A Jump ID is a unique encrypted identifier embedded in a URL. When a customer clicks on an HP advertisement - on Facebook, in an email, or within the HP app - the URL they land on contains a Jump ID.
+- **This Jump ID allows HP to trace exactly:**
+    1. Which advertisement the customer clicked
+    2. Which platform they came from (Facebook, email, in-app, etc.)
+    3. Which campaign was shown to them
+    4. The exact customer journey that led to an AIP subscription
+- **Pipeline:** Reads Jump ID data from Excel sources and loads it into dimension tables. Jump ID data appears in the allinplan_sub_base_ts pipeline to link subscription events to the advertisement campaign that drove them.
+- **Business value:** Downstream teams use this to measure campaign effectiveness - whether a specific advertisement or campaign is actually converting app users into AIP subscribers.
+
+---
+
+## 4. HP One Dependency Graph
+
+The dependency graph shows how all AIP data products are related - what feeds what, and what the central fact table depends on. This is your mental map for understanding the full AIP data landscape.
+
+> Note: allinplan_sub_base_ts is the central fact table. Almost every other AIP pipeline either feeds into it or depends on it. When you work on any AIP job, you will trace the dependency back to this table.
+
+| Level      | Pipeline / Table               | Depends On                           | Feeds Into                            |
+|------------|-------------------------------|--------------------------------------|---------------------------------------|
+| Source     | CDM (OneCloud)                | Stratus, Jarvis, Tropos upstream APIs| All AIP pipelines                     |
+| L1         | hpone_subscription_enrollment | CDM Base                             | new_enrollment, dtls_enrollment       |
+| L1         | hpone_subscription_enrollment_ts | CDM Base (Target State events)     | subscription_events, entity_status    |
+| Central    | allinplan_sub_base_ts         | subscription_events, entity_status + multiple | ALL downstream AIP products — CENTRAL FACT |
+| Derived    | vw_hpone_subscriptions_pii    | allinplan_sub_base_ts                | allinplan_sub_base (legacy view)      |
+| Derived    | allinplan_crm                 | allinplan_sub_base_ts + CDM          | allinplan_crm table                   |
+| Derived    | paas_usage                    | allinplan_sub_base_ts + CDM          | allinplan_subscription_usage_daily    |
+| Derived    | device_dimension              | allinplan_sub_base_ts + product ref  | device_dimension table                |
+| Derived    | paas_supply_history           | allinplan_sub_base_ts + Supplies team| paas_supply_history table             |
+| Derived    | allinone_address_mapping      | allinplan_sub_base_ts (fraud checks) | allinplan_address_check table         |
+| Fulfillment| ink/trade/paper order shipments | CDM Base (order events)             | order status tables                   |
+| Reporting  | ink_order_reporting           | order status tables                  | Snapshot report for downstream        |
+| Financial  | billing_base, billing_cycle, purchase_order | CDM Base (billing events) | Financial insight tables              |
+| Supporting | device_claims                 | CDM Base (claim events)              | Referenced in sub_base_ts             |
+| Tracking   | shipment_tracker              | Carrier APIs (FedEx, DHL, UPS, USPS) | Carrier API tracking tables           |
+| Attribution| paas_jumpid                   | Excel → CDM dimension tables         | Jump ID dimension tables              |
+
+### 4.1 Full Dependency Map
+
+```
+HP One Dependency Graph
+CDM (OneCloud)
+ └─ hpone_subscription_enrollment → new_enrollment,
+   dtls_enrollment
+   └─ hpone_subscription_enrollment_ts →
+     subscription_events, entity_status
+     └─ allinplan_sub_base_ts ← CENTRAL FACT
+       ├─ vw_hpone_subscriptions_pii → allinplan_sub_base
+       ├─ allinplan_crm
+       ├─ paas_usage (daily usage)
+       ├─ device_dimension
+       ├─ paas_supply_history
+       └─ allinone_address_mapping (fraud)
+└─ ink/trade/paper order shipments → order status tables
+   └─ ink_order_reporting
+└─ billing_base, billing_cycle, purchase_order, device_claims
+   └─ shipment_tracker → carrier API tracking
+   └─ paas_jumpid (Excel → dim tables)
+```
+
+### 4.2 Deprecation Status
+
+Two pipelines are being deprecated as Target State adoption grows:
+
+| Pipeline                                    | Status          | Replacement                     | Timeline                                          |
+|---------------------------------------------|-----------------|----------------------------------|---------------------------------------------------|
+| hpone_subscription_enrollment (Jobs 1)      | Being deprecated| hpone_subscription_enrollment_ts | When downstream users migrate to Target State tables|
+| vw_hpone_subscriptions / allinplan_sub_base (Job 4) | Being deprecated| allinplan_sub_base_ts           | When Target State event volume matches legacy volume|
+
+> Note: Deprecated does not mean deleted. Old tables will become views pointing to new tables so downstream users who cannot migrate immediately still read correct data.
+
+---
+
+## 5. Data Storage Strategy and Retention
+
+### 5.1 Current Storage Tier
+
+All AIP data is stored in AWS S3 Standard storage. There is currently no data archival or retention policy in place for AIP.
+
+| Decision                 | Rationale                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------|
+| No archival / tiering    | AIP is a new, highly monetised program - all data must remain instantly accessible              |
+| No retention cutoff      | Program is only 2 years old; full history is needed for analysis and campaigns                  |
+| Standard tier for all data| Moving to infrequent-access storage was tried but caused higher retrieval costs when analysts needed historical data |
+| Future consideration     | When subscriber count reaches 2–3M, team may build aggregated data products and apply retention on raw fact tables (e.g., keep last 5–6 years) |
+
+### 5.2 Delta Transaction Retention
+
+Within Databricks Delta tables, a different retention applies - transactional history (Delta log), not the data itself:
+
+1. Default Delta transaction retention: 7 days
+2. allinplan_sub_base_ts uses 80 hours (bypasses the 7-day minimum via retentionDurationCheck = false)
+3. This means: if data is corrupted, you can restore the table to any state within the past 80 hours
+
+> Note: The Instant Ink program is 10+ years old and still retains all its data because it is also highly monetized. This is the precedent for AIP data strategy.
+
+---
+
+## 6. Code Walkthrough - allinplan_sub_base_ts
+
+This is the most important and most complex pipeline in All-In-Plan. The walkthrough covered the full notebook cell by cell. Below is a structured reference of every major section.
+
+### 6.1 Pipeline Overview
+
+| Property         | Value                                         |
+|------------------|-----------------------------------------------|
+| Notebook         | allinplan_sub_base_ts.py                      |
+| Target table     | gold_hpallinone_pii.allinplan_sub_base_ts     |
+| Write mode       | Overwrite (schema evolving - new columns added frequently) |
+| Environment      | Databricks LTS 16.4 (moving to 17.3 - Z-standard compression default) |
+| Estimated runtime| 29–30 minutes on current cluster              |
+| Current cluster  | 16.4.x, 12X workers (legacy - upgrade recommended) |
+| Action calls     | Lazy evaluation throughout - only one write action at the very end |
+| Delta vacuum retention| 80 hours (bypasses 7-day minimum)        |
+| Status           | Actively evolving - multiple developers, daily fixes ongoing |
+
+### 6.2 Cell-by-Cell Structure
+
+**Cell 1-2 - Common Utilities (utils.py)**
+- Import shared utility notebook: `- run ./utils`
+- Provides AWS service connections, secret management, Delta format write helpers, logger configuration, and legacy connectors.
+- Note: Splunk logging lines are commented out throughout the notebook (to be removed).
+
+**Cell 3 - Environment Widget and Imports**
+- Declares widget for environment variable. Allows Airflow to inject the environment at runtime.
+- Example: 
+  ```python
+  dbutils.widgets.text("environment", "prod")
+  environment = dbutils.widgets.get("environment")
+  ```
+
+**Cell 4-5 - Source: Subscription Events DataFrame**
+- Source: `gold_hpallinone_pii.allinplan_subscription_events`
+- Key operations: Rank by subscription_id, window function for null backfilling, handle nulls in event data.
+
+**Cell 6-7 - Source: Entity Status DataFrame**
+- Source: `gold_hpallinone_pii.allinplan_entity_status`
+- Ranks, filters, and persists entity status records.
+
+**Cell 8 - Serial Number and UID Null Filling**
+- Null-filling window function on entity status.
+
+**Cell 9 - AIP Device Claims DataFrame**
+- Source: Upstream CDM device claims table. Includes SMB (Small and Medium Business) events.
+
+**Cell 10-11 - Inner Join: Subscription Events + Entity Status**
+- Combines subscription events with entity status to produce enriched base DataFrame.
+- Notes on cache/temp table redundancy.
+
+**Cell 12-13 - Flag Columns and Status Tracking**
+- Derived columns: priority_status, most_recent_suspension, suspension_date, inactive_date, cancellation_date.
+
+**Cell 14-15 - Device Claims Join**
+- Source: allinplan_device_claims table (Job 17). Joins and caches additional detail.
+
+**Cell 16 - Device Update Timestamps**
+- Captures first timestamp when a device update event was recorded.
+
+**Cell 17-18 - AIP Order Data (Trade Order)**
+- Brings AIP order information - device fulfilment order.
+
+**Cell 19 - Instant Ink Sub Base Join**
+- Brings Instant Ink subscription data into AIP central fact table.
+- Use cases: track customer journey between programs.
+
+**Cell 20-21 - AIP Purchase Orders**
+- Brings purchase order and financial information.
+
+**Cell 22 - Jump IDs DataFrame**
+- Brings campaign attribution data for each subscriber. Filters test/dummy data.
+
+**Cell 23-25 - Product Type Classification**
+- Four product type DataFrames: IoT Printer, Care Pack, Instant Ink, Instant Paper. Unioned for classification.
+
+**Cell 26-27 - Trial Subscription Tracking**
+- Calculates trial end date and captures first active session.
+
+**Cell 28-29 - Resigned Events**
+- Captures cancellation-then-reinstatement patterns.
+
+**Cell 30-32 - Cancellation Classification**
+- Four cancellation states: hp_one_cancels, delinquency_cancel, complete_cancels, processing_cancel.
+
+**Cell 33 - Trade Delivered (Fulfilment Check)**
+- Checks whether device was shipped and delivered.
+
+**Cell 34 - Order Attribution ID**
+- Retrieves latest non-null order attribution ID.
+
+**Cell 35-36 - Cancellation Process Start Date and Reasons**
+- Explodes cancellation reasons array. Captures process start date, trial_cancellation_flag, voluntary cancellation flag.
+
+**Cell 37-42 - Source Timestamp Update and Instant Ink Filters**
+- Handles source table migration and Instant Ink specific filtering/accuracy columns.
+
+**Cell 43-45 - Care Pack Handling and Final User DataFrame**
+- Care pack-specific filter DataFrame, joined with main user_df. Notes typo: `d_duo` instead of `dedup`.
+
+**Cell 46-48 - Subscription Header Enrichment**
+- Large SQL query for transformations, QUALIFY window clause, Jump ID test-format filtering.
+
+**Cell 49-50 - Initial Instant Ink Plan and UTM Source**
+- Retrieves initial Instant Ink plan and UTM source data.
+
+**Cell 51-52 - Referral Tracking**
+- Tracks first/last referrer, PURL, campaign referral.
+
+**Cell 53 - AIP Printer Type Classification**
+- Maps printer SKUs to printer model names.
+
+**Cell 54-56 - Tenant ID, Campaign ID, Smooth Transition**
+- Brings tenant and campaign IDs, tracks state transitions.
+
+**Cell 57-58 - Subscription Type Classification**
+- Classifies hp_one_subscription_type and retrieves recent_printer_sku.
+
+**Cell 59-61 - Final View Consolidation**
+- Consolidates all DataFrames, left joins, coalesces columns, output ordering.
+
+**Cell 62 - Customer Type (GA vs Beta)**
+- Distinguishes beta and GA customers based on subscription date and printer GA release date.
+
+**Cell 63-65 - Final Flags and Write**
+- Final flag columns, care pack joining, triggers Spark write action.
+
+**Cell 66 - Vacuum**
+- Reduces Delta transaction log retention to 80 hours.
+
+---
+
+## 7. Key Engineering Patterns from the Code Walkthrough
+
+### 7.1 Lazy Evaluation and Action Calls
+
+- All transformations are lazy until the final write action.
+- Actions: `df.write.saveAsTable()` triggers computation.
+
+### 7.2 Persist vs Cache
+
+| Method      | Storage                  | When to Use                                   | Risk                       |
+|-------------|--------------------------|-----------------------------------------------|----------------------------|
+| df.persist()| Memory + Disk (spills)   | DataFrame called multiple times, small enough | OOM if too large           |
+| df.cache()  | Memory only (default)    | Frequently accessed small DataFrames          | Data lost if executor fails|
+| Temp Table  | Spark session catalog    | Need SQL access in later cells                | No perf. benefit over DataFrame |
+
+> Code review: Cell 11 uses both cache() and temp table; likely redundant.
+
+### 7.3 Window Functions
+
+- Used for ranking, lag, null backfilling.
+- Warning: Do not oversimplify case/window logic as data patterns are complex.
+
+### 7.4 Schema Evolution and overwriteSchema
+
+- Table schema is evolving; overwriteSchema is used for flexibility.
+- Will move to incremental merge once stable.
+
+### 7.5 Code Quality Notes (Items for Future Cleanup)
+
+| Item                         | Location        | Action Required           |
+|------------------------------|-----------------|--------------------------|
+| Commented Splunk metric lines | Throughout      | Remove                   |
+| Redundant cache + temp table | Cell 11         | Keep only one            |
+| Typo: d_duo instead of dedup | Cell 44         | Rename variable          |
+| Old Splunk import lines      | Top of notebook | Remove                   |
+| Comments missing on cells    | Several cells   | Add brief comments       |
+| Legacy runtime 16.4          | Cluster config  | Upgrade to 17.3 LTS      |
+
+---
+
+## 8. Access, Onboarding and Next Steps
+
+### 8.1 Access Checklist
+
+| System                      | Access Required      | Notes                                       |
+|-----------------------------|---------------------|---------------------------------------------|
+| HP Laptop + VPN             | Full access         | Required for all HP internal systems        |
+| Databricks (Data OS Prod)   | Developer access    | Primary working environment                 |
+| Databricks (Data OS ITG)    | Developer access    | Testing environment                         |
+| GitHub (HP internal)        | Read + Write        | All four IIBI repositories                  |
+| Unity Catalog (team_iid_prod)| Read + Write       | PII schema requires separate approval       |
+| Airflow UI                  | Read + DAG trigger  | For testing and monitoring                  |
+| Codeway (Azure DevOps)      | Pipeline run access | For deployments                            |
+| Atlan                       | Read access         | Data catalog for table documentation        |
+| Jira (HP external)          | Full access         | For ticket tracking                         |
+| Systems table               | Read (if available) | Job metrics - may have billing restrictions |
+
+### 8.2 MTP Checklist
+
+- HP uses an MTP checklist to ensure all production readiness criteria are met before a pipeline goes live.
+- Includes: code story, change history, test evidence, approvals.
+- Engineers should add brief cell-level comments in notebooks.
+
+---
+
+## 9. New Terms from Session 3
+
+| Term          | Definition                                                                                 |
+|---------------|-------------------------------------------------------------------------------------------|
+| SMB           | Small and Medium Business - a customer segment; SMB events are included in AIP device claims |
+| SFMC          | Salesforce Marketing Cloud - HP's CRM email platform used for subscriber campaigns         |
+| Jump ID       | Encrypted unique ID in a URL that traces which advertisement/campaign drove a user click   |
+| PURL          | Personal URL — a customised URL sent to a specific customer for tracking their journey     |
+| UTM fields    | Tracking parameters in URLs (utm_medium, utm_source, utm_campaign, etc.) for campaign attribution |
+| GA            | General Availability - product released to all customers publicly (after beta phase)       |
+| Beta customer | Customer who subscribed during the testing phase before the product was publicly released  |
+| Tenant ID     | Subscriber identifier in HP's system - one tenant can have multiple addresses but one subscription address |
+| Lazy evaluation| Spark's deferred execution model - transformations only compute when an action is triggered |
+| persist()     | Materialises a DataFrame in memory+disk for reuse — use when called multiple times and small enough |
+| cache()       | Materialises a DataFrame in memory only - similar to persist but memory-only by default    |
+| QUALIFY       | SQL clause (like HAVING for window functions) used instead of subquery to filter on window rank results |
+| overwriteSchema| Delta option to allow schema changes on write without manual DDL — used when schema is evolving |
+| MTP Checklist | Move To Production checklist - HP's production readiness document tracking changes per pipeline |
+| Delinquency   | Subscription cancellation due to payment failure / non-payment — a new data product is being built |
+| RTP           | Real-Time Print - telemetry signal from AIP printers                                      |
+| Care Pack     | HP's customer support / extended warranty program — tracked as a product type in AIP      |
+| IoTPC         | IoT PC — HP's PC-as-a-Service program, larger than AIP, currently in pilot                |
+| Marconi / Victoria / Narita / Smart Tag | AIP printer model names identified by product SKU format         |
+
+---
+
+*CPSS Data Engineering | KT Session 3 — Dimensions, CRM & Code Walkthrough | Page 1 of 1*
