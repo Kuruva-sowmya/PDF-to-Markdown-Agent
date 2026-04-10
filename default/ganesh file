@@ -1,0 +1,99 @@
+Source tag : qwertyulkjhgfdszxcvbn
+Note : This extracted file is generated from SharePoint or Wiki content. If the source document contains images, charts, or graphical elements, they may not be fully converted into Markdown format. For complete clarity, please refer to the original source using the source tag provided above.
+
+# Bronze++ New Joiner Playbook
+
+| Process / Tool | PR Link |
+|---|---|
+| **Read_Access: Databricks - DEV / ITG / PROD** | DEV: https://dataos-dev.cloud.databricks.com/ <br> ITG/PROD: https://dataos-prod.cloud.databricks.com/ |
+| **Write_Access: Databricks - DEV / ITG / PROD** | https://github.azc.ext.hp.com/hp-data-platform/dataos-databricks-terragrunt/pull/4351 |
+
+For the Databricks read access for all the accounts: send request mail to the project owner/admin (Ray Hechavarria) to add to the project through Zone console so that you will grant access to DBR workspace.
+
+- Prod workspace: https://dataos-prod.cloud.databricks.com
+- Dev workspace: https://dataos-dev.cloud.databricks.com
+
+For Databricks write access:
+- Go to the following and make a branch starting from link feature\add_<your_name>_for_access
+- Clone the repo and go to your branch
+- DEV (follow the to make the changes) Go to: git_repo PR
+- ITG/PROD (follow the to make the changes) Go to: git_repo PR
+- For adding to groups (follow the to make git_repo PR the changes)
+- Raise the PR (pull request)
+- You would also need to raise a Jira ticket for Databricks access (Data Access/Tools Request). Below Jira Portal 32 the table, you will get a link to a folder for Jira Ticket examples.
+- Once your pull request is approved you can get access.
+
+## Atlan
+- Click on this link.
+- Click on Start an access request
+- Click on Application
+- Search for 'Atlan Data Catalog'
+- Click on read only access
+- Give the reason for access
+- Submit the request.
+
+## Airflow - DEV
+- https://airflow.dev.hpdataos.com/
+- https://github.azc.ext.hp.com/hp-data-platform/k8s-dataos-core-dev-2/pull/867
+- Follow above process and make changes in file: k8s-dataos-core-dev-2/flux2-blue/airflow-dev/infra/airflow_users.yaml
+- For Airflow, you would also need to raise a Jira ticket for Databricks access - Jira Portal 32. Below the table, you will get a link to a folder for Jira Ticket examples.
+
+## Airflow - ITG/PROD
+- https://airflow.stg.hpdataos.com/
+- https://airflow.hpdataos.com/
+- https://github.azc.ext.hp.com/hp-data-platform/k8s-dataos-core-prod/pull/833
+- Follow above process and make changes in files:
+  - k8s-dataos-core-prod/flux2-blue/airflow-itg/infra/airflow_users.yaml - ITG
+  - k8s-dataos-core-dev-2/flux2-blue/airflow-prod/infra/airflow_users.yaml - PROD
+- There are 3 places: onecloud-admin, onecloud-viewer, onecloud-paas. Both users are added under onecloud-admin only.
+
+## Splunk (No PR Required)
+In case we don't have Splunk access - follow below procedure:
+- Go to the below link and create portal ticket. This is different from the one where we create requests for AWS, Databricks. It is not DataOS access request / Support ticket.
+  - https://hp-jira.external.hp.com/servicedesk/customer/portal/616/create/1662
+- Provide the required details as mentioned below:
+  - Email of requested: Optional
+  - Tool Name: Splunk
+  - Splunk Best Practices Agreement: Select the check box
+  - Splunk Index or User to Clone: Bronze++ Automation | Splunk 9.0.4.1 (hp-cia.com)
+  - Splunk Search Head Environment: DataOS [https://dataos.splunk.prod.cloud.tools.hp-cia.com/]
+  - Splunk Permission: Read only
+- You need to mail your manager for approval and paste it as a comment after creating the link.
+- Once your ticket is approved you can get access.
+
+## Codeway / Azure Devops Pipeline (No PR Required)
+You would need to raise a Jira ticket for Databricks access - Jira Portal 32. Below the table, you will get a link to a folder for Jira Ticket examples.
+
+GitHub Request posted in support-onboarding for getting added to dataos-data-products
+
+Or send an email to Isaac Chan for getting added to dataos-data-products org. Once a member is onboarded to this org, Sulochana Tandra can add them to onecloud team. After that, they can get write access to the repos.
+
+## Sharepoint Access
+Once we click on a sharepoint link, it will take us to a page where we can request access by sending a short message: "I am new joiner in Bronze++ team. Please grant me access to sharepoint where all team related documents exist"
+
+Send an email to Stuart, Michael <michael.stuart@hp.com> requesting access for site: https://hp.sharepoint.com/sites/DataOSOperations/
+
+## Wiki
+Any admin should be able to add the user with a valid hp email id. Contact: Sulochana Tandra
+
+## cscrpds aws bucket
+Need to raise portal-32 ticket to get the access for cscrpds aws bucket which we need to work on OpenSearch dashboard. We need to raise portal-32 ticket, below are the reference portal-32 request tickets:
+- https://hp-jira.external.hp.com/servicedesk/customer/portal/32/DATAOS-19428
+- https://hp-jira.external.hp.com/servicedesk/customer/portal/32/DATAOS-19427
+
+## Zone Console
+NA
+URL: https://console.hponecloud.com/projects?ownership=0&phase=-1&usage=0&name=&sort=new_old
+Subscribe to the Tag: DataOS NG IND PROD
+
+## Jira Ticket Examples - New Onboarding Jira Tickets
+### AWS Access:
+To get access to AWS buckets, there are 2 steps:
+1. Raise a portal 32 ticket to get access to the account. Eg: https://hp-jira.external.hp.com/servicedesk/customer/portal/32/DATAOS-12369
+2. Once above ticket gets approved, one will be able to see the account in AWS Console.
+3. Raise a PR to add your email to the account you need access to. Eg: https://github.azc.ext.hp.com/hp-data-platform/dataos-dev-terragrunt/pull/1075
+
+Once the above PR is approved, one would be able to switch the role from READONLY to the role for which above PR is raised.
+
+Refer to access.xlsx (below document) to raise access requests:
+- [Access (1).xlsx](https://rndwiki.inc.hpicorp.net/confluence/download/attachments/1449234247/Access%20%281%29.xlsx?version=1&modificationDate=1712210209000&api=v2)
