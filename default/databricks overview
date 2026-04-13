@@ -1,0 +1,1411 @@
+Source tag : Databricks_Overview_Transcript.docx
+Note : This extracted file is generated from SharePoint or Wiki content. If the source document contains images, charts, or graphical elements, they may not be fully converted into Markdown format. For complete clarity, please refer to the original source using the source tag provided above.
+
+# Databricks Overview Transcript
+
+GMT20240916-094148_Recording_1920x896
+
+---
+
+## Session Introduction
+
+0:04  
+Yeah, so let me so first Riyaz, maybe we should not get forget, maybe we can comment on that 4 not 4 error first.
+
+0:14  
+Let's start from there so that I will continue my session then.
+
+0:18  
+Yeah, so that we commented now by yeah, yeah, please so that you know those guys will start working on your request.
+
+0:27  
+Okay, bye.
+
+0:29  
+If you will, the you will get access then by the end of the day may be we can raise that PR at least for air flow.
+
+0:41  
+Are you commenting or sharing?
+
+0:42  
+May be, yeah, yeah, I am sharing.
+
+0:46  
+Yeah, share and may be I can tell you just take a screenshot of that and add that screenshot in the command box.
+
+0:54  
+Yeah, right.
+
+0:56  
+Try to open this link now, Yeah, day or it Yeah.
+
+0:59  
+Now take the screenshot of this may be open sleeping tool.
+
+1:14  
+Yeah, wait, take care taken.
+
+1:18  
+OK, I think OK is the last one.
+
+1:31  
+Yeah.
+
+1:36  
+OK, now tag.
+
+1:38  
+Tag 2.
+
+1:38  
+Tag 2.
+
+1:39  
+Asha.
+
+1:39  
+Asha has given, you know, Scroll down.
+
+1:41  
+Please take the No, no, yeah, no, no.
+
+1:44  
+Scroll down.
+
+1:44  
+Yeah.
+
+1:45  
+Now tag.
+
+1:46  
+OK, yeah.
+
+1:47  
+Now tag there.
+
+1:48  
+Go above high.
+
+1:49  
+Yes.
+
+1:50  
+Copy that name high and percent.
+
+1:52  
+You can put not like that.
+
+1:53  
+No no no not like that in the message and yeah in the message only and yeah Asha the below I think vacation okay okay yeah I am trying just put the message like yeah I am trying to access those.
+
+2:13  
+I am trying to access the link given by you to raise the PRI am trying to access the link given by you to raise the PR but getting an error.
+
+2:25  
+Added a screenshot.
+
+2:46  
+But getting error.
+
+2:48  
+I have attached the screenshot.
+
+2:54  
+I am trying to access the link given by you to to to raise the PR OK there you can add.
+
+3:03  
+I am trying links given by you to to raise the PR to raise the PR OK but after.
+
+3:12  
+Is the no after the error?
+
+3:14  
+No, you can put it seems like I don't have permissions.
+
+3:18  
+Yeah it seems like I don't have permissions to access the link.
+
+3:27  
+don't have permissions to access the link.
+
+3:28  
+that's it.
+
+3:32  
+I will see the name touch the screenshot.
+
+3:36  
+that's it.
+
+3:39  
+OK, can I add?
+
+3:41  
+Yeah.
+
+3:45  
+Space, give the space.
+
+3:47  
+Yeah, that's it.
+
+3:57  
+Fine.
+
+4:01  
+OK, OK then.
+
+4:02  
+Now let me share my screen.
+
+4:04  
+OK, bye.
+
+4:18  
+Okay, you can see my screen right?
+
+4:24  
+Yes, yes, bye.
+
+---
+
+## Databricks Platform Overview
+
+4:37  
+So today you know the session is for data bricks overview.
+
+4:41  
+I need to do the overview of data bricks.
+
+4:43  
+So both of you have worked on data bricks, right?
+
+4:52  
+Yes, yes, I have not worked data bricks but yeah.
+
+4:57  
+But I know the basics.
+
+5:00  
+OK, somehow.
+
+5:01  
+OK, no problem.
+
+5:04  
+I will share all the links once we complete this data bricks Devm prod OK fine.
+
+5:12  
+So we have you know for for what purpose we are using databridge that's first let me tell you see the data bricks looks like this week.
+
+5:20  
+Let me open the first day one.
+
+5:26  
+OK, so this is you know one one platform is there the way you know we write some Python code in Jupiter notebook or sometimes we are using you know any ID like VS code or PyCharm, this kind of ID for writing the Python code in the same way for cloud, you know on the cloud we have this data bricks platform is there to write our code so that we can write the Python scripts, SQL script even Pyspark script.
+
+5:56  
+So data bricks is more more advanced like in a single platform we can use SQL, SQL query as well Python query as well Pyspark query as well.
+
+6:06  
+So, so this kind of things we can do on this data brick sites.
+
+6:10  
+OK, so in our project also we are using this data bricks as a as a development tool or as ID where we are doing our development part, we are writing our code on data bricks notebook and then we are creating a job and deploying those jobs.
+
+6:27  
+That is what we are doing.
+
+6:28  
+So, so we have this dev account and prod ITG account and prod account.
+
+6:33  
+So obviously you know like why?
+
+6:35  
+Why we have this dev and ITG and prod?
+
+6:38  
+So for testing purpose mostly we go with the dev account and once we do all the testing, all the POC or all the UAT, it is done then then then we go for the prod, prod side so that we can access the prod data and directly deploy it.
+
+6:52  
+That is what we are having the different, different environment.
+
+6:56  
+We can say dev, dev environment, prod environment, IDG is there.
+
+7:01  
+IDG is like a testing testing environment.
+
+7:05  
+But you know in most of the times we are directly working with the prod only.
+
+7:09  
+That is what usually not a good practice.
+
+7:12  
+But why we are using prod only?
+
+7:14  
+Because you know mostly we need to access some unity table.
+
+7:19  
+So unity table in the sense see if you see the data bricks UI on the left hand panel you can see here one option like catalog.
+
+7:28  
+So in the catalog side we have this some some unity tables are there that is so called a unity table.
+
+7:33  
+So in dev side we don't have the access of unity table for because of that reason most of the time we are not doing the development from on the dev environment directly.
+
+7:46  
+We are working with the prod environment.
+
+7:48  
+If you can see I have opened my notebook from the prod side only.
+
+7:52  
+OK so this is my dev account and this is my prod account.
+
+7:55  
+OK so I am most of the time I am directly working with the prod side.
+
+8:00  
+I am creating a feature branch from the main RCDO branch and then I started my my testing, my POC or my UIT testing.
+
+8:09  
+I am doing it here directly working with the prod data instead of working with the dev data.
+
+8:14  
+That is what?
+
+8:15  
+What is the reason though?
+
+8:16  
+Though it is not a good practice directly handling the prod data.
+
+8:20  
+It is not at all a good practice.
+
+8:21  
+But why?
+
+8:22  
+What is the reason?
+
+8:23  
+Most of the time in my transformation I need to handle the catalogue table.
+
+8:27  
+But since dev account does not have the access of catalogue table, OK, catalogue unity table.
+
+8:33  
+So that is why we are working with the prod environment.
+
+8:37  
+OK, yeah.
+
+8:40  
+So I have let me open the prod one again.
+
+8:44  
+So this is dev.
+
+8:45  
+I I showed you dev account for database there is prod account as well.
+
+9:02  
+OK, so this is how in a first first site it will looks like this way.
+
+9:07  
+OK so here we have this data breaks.
+
+9:09  
+Then we have a different different option like what is workspace?
+
+9:12  
+Then what are the notebooks we have used recently that which comes under this recent tab.
+
+9:19  
+Then we have catalogue, then workflow and compute.
+
+9:21  
+OK and then we have some SQL editor as well.
+
+9:24  
+The data break data break platform itself will provide a SQL editor as well here.
+
+9:30  
+So data bridge is more convenient for a you know for a developer it is a convenient platform.
+
+9:38  
+If you go with any other ID like Jupiter notebook or you know VS Code or PyCharm, there we can use either, you know only Python language.
+
+9:49  
+And for sequel maybe we need to use DBA Ware right?
+
+9:54  
+For writing some sequel query we need to take help from the DBA Ware sides.
+
+9:59  
+So instead of that we have this database where we can have SQL editor as well, Python editor as well.
+
+10:05  
+All the things OK in a single platform.
+
+10:08  
+That is why peoples are mostly working on the database sides.
+
+---
+
+## Databricks UI Walkthrough
+
+10:16  
+What is this?
+
+10:17  
+So now I am in a prod side OK in prod environment this is my dev environment.
+
+10:22  
+Dev and prod both will looks same but I will go with the prod side only so that I can show you most of the data is available in prod account that is why OK, so forget about the dev and don't don't think like a dev we have not we have not talked about the dev account.
+
+10:39  
+So dev and prod by by GUI it is looks like same.
+
+10:43  
+But why I am moving only towards the prod side since I need to show you some data, some catalogue, some unity table and those things.
+
+10:49  
+That is why I am mostly that is why in the coming session as well, most of the time I will open prod environment only.
+
+10:57  
+Yeah, so, so I am in workspace now.
+
+11:02  
+So in workspace we have this kind of things like if we expand this workspace, so we will get a different option here.
+
+11:09  
+So our team is, you know, team IIBI, OK.
+
+11:15  
+So there is one option like team IIBI.
+
+11:17  
+So inside that whatever the jobs you know here we get some jobs.
+
+11:22  
+OK Job run is option is there if you Scroll down somewhere now there is a job option job run OK and it will create some job.
+
+11:29  
+Once we deploy those jobs, it will goes under this work work workflow option.
+
+11:35  
+OK, see let me show you this workflow.
+
+11:38  
+So here you can see I am in the I am in the tab of job OK.
+
+11:44  
+And there is next like job runs and the next option Delta live table OK, now I am inside the job tab OK, so now if I want to search any job, see recently one of my job was running.
+
+11:59  
+Let me check whether it got completed or not.
+
+12:07  
+Yeah, see if you can see here.
+
+12:08  
+Now I am in the workflow.
+
+12:10  
+Can you see my screen?
+
+12:14  
+Yes, yes, yes, yeah, yeah.
+
+12:17  
+So now I am in the workflow.
+
+12:19  
+So inside the workflow we have jobs and I I filter my jobs by this name.
+
+12:23  
+Once we filter out our jobs with this name, it will show me the running status on which day.
+
+12:30  
+So one single candle is like for one day OK.
+
+12:34  
+So if we take my cursell on this run on this green candle then it will show you the all details like what is my job ID job run ID OK launch like by scheduler whether this job is ran by scheduler or manual or something like that.
+
+12:50  
+OK, started on this 16th of September like today only it got started by this time, it got ended by this time around like 3048 minutes it ran around.
+
+13:00  
+OK, so yeah, so total duration is 48 minutes.
+
+13:03  
+It ran and the strategy is succeeded.
+
+13:05  
+OK.
+
+13:06  
+So and likewise likewise see wherever this red coloured cattle is there on that day that job got failed.
+
+13:13  
+So we can check here.
+
+13:15  
+Like because of what reason it got failed.
+
+13:17  
+Something, something if I click on any candle here, it will navigate to the code part.
+
+13:23  
+What is the code inside this?
+
+13:25  
+Yeah, see so this is my code, this is my notebook code.
+
+13:32  
+OK, whatever the code I have written to develop the jobs, all those kind of transformation or whatever it may be the the coding part, it will show me here.
+
+13:42  
+So here we have used the Pi spark coding.
+
+13:45  
+OK, Now on the right side panel, we were again getting those same thing like job details, OK.
+
+13:53  
+And if you Scroll down, there is one more thing I will get like compute details like whatever the cluster, what kind of cluster configuration used to to run the jobs that I will get it here inside the compute tab.
+
+14:06  
+OK?
+
+14:07  
+So I use the driver note 7G 2X large worker is 7G 2X large.
+
+14:12  
+How many worker notes?
+
+14:13  
+I use like 20 worker notes.
+
+14:16  
+And this is something on demand and so many things.
+
+14:18  
+I will get it here, OK.
+
+14:21  
+And some dependent library also.
+
+14:22  
+I will get it here.
+
+14:24  
+All those things, I will get it like this is what the cluster configuration sites, what parameter, what variable I used inside my jobs, those parameter.
+
+14:32  
+I will get it here, OK.
+
+14:34  
+I will I will tell you slowly, slowly we will go in details like from where this variable, it will, it will, it will read it.
+
+14:43  
+See, let me scroll up.
+
+14:46  
+If I will Scroll down yeah.
+
+14:48  
+So see here I am creating some job parameter.
+
+14:52  
+So like what is the name of that Tera?
+
+14:54  
+OK, so Tera is the one one variable I am I am creating and one next is the parameter Yeah, the prod this is something environment.
+
+15:05  
+Yeah, sorry.
+
+15:07  
+One, one variable I am creating job name.
+
+15:09  
+The job name is Tera.
+
+15:10  
+I have defined it here only OK job name I have given hard put it here Tera the environment I am giving here.
+
+15:18  
+So by the by the list OK it is a Python list.
+
+15:21  
+So it will create the drop down kind of things.
+
+15:25  
+If I will show you somewhere it will be there Yeah in this jobs yeah see so this kind of things it will create on the top this is something called as the job parameter.
+
+15:37  
+I am passing some parameter value here.
+
+15:40  
+So DB host I am passing this value DB name.
+
+15:44  
+So see DB name if I feel I will click on this drop down it will show me 23 option.
+
+15:49  
+So here also in environment parameter I will get some drop down message.
+
+15:55  
+So here I can have 33 option I can select any one of them ITG or I can select this prior.
+
+16:01  
+So how I will get this drop down?
+
+16:03  
+So with the help of this kind of things where is that?
+
+16:08  
+Yeah, yeah.
+
+16:12  
+So with this one like environment and I will get the 3 option here, OK.
+
+16:17  
+And here I am selecting default environment as a dev, default I am selecting as a dev, but from that I am selecting the prod.
+
+16:27  
+Are you getting my point?
+
+16:30  
+Yes.
+
+16:32  
+Yeah.
+
+16:32  
+Try to understand if you will get confused, you can interrupt me in between.
+
+16:36  
+OK, no problems.
+
+16:38  
+OK then the secret name I am creating one variable here I am not passing any value hard coded value.
+
+16:44  
+Then next variable is Splunk name sorry Splunk secret name.
+
+16:47  
+Then I am role I am passing DB host DB port again database name also I am passing the list here so I need to select it will create one drop down and I it can have 3 value on by default.
+
+16:59  
+I am selecting stage I, I OK, so let me show you once again for for database name, DB name see for DB name also somewhere you can see DB name see I have the drop down OK, I can select any one of them like this kind of things.
+
+17:13  
+It will create the IT will create the variable.
+
+17:16  
+So this variable you can see here as well.
+
+17:20  
+So it will take this value like DB host where is DB host see DB host.
+
+17:25  
+So this variable is taking the this value DB name see DB name, DB name is taking prod PRDII DB port, DB port where is where is that DB port?
+
+17:35  
+Yeah, this one only, sorry.
+
+17:37  
+OK, DB name I can show you DB name is this one and DB code is 5439.
+
+17:42  
+So this value for this value also we need to write one or we need to write one Jason file from that Jason file.
+
+17:49  
+Once we deployed that Jason file along with our job, then it will read all this variable, all this variable from that Jason file and it will reflect here.
+
+18:00  
+OK, we will see those configuration things but try to understand from where this variable is coming.
+
+18:06  
+Actually I have defined it.
+
+18:07  
+I have defined this left hand side variable in my notebook only.
+
+18:11  
+And the value, the value of this variable like this 1I have defined in another file that is so called as the Jason file.
+
+18:19  
+From there I am getting this.
+
+18:20  
+From there this DB host, DB name, DB port, this kind of parameter will be read from that Jason file.
+
+18:28  
+OK then see at the bottom side, I am I have it, I have this.
+
+18:34  
+Yeah, yeah.
+
+18:34  
+Please.
+
+18:35  
+Sorry for interrupting, actually, yeah, debut dot vijesh dot drop down May 3 parameters.
+
+18:41  
+Okay, but here I can yeah yeah yeah.
+
+18:45  
+But here I can see I can show you only 2, right?
+
+18:49  
+Yeah yes, debutant.
+
+18:51  
+Yeah see actually just for an example purpose, I showed you this one.
+
+18:55  
+This is the different job IICRM winback acquisition.
+
+18:58  
+This is a different job.
+
+18:59  
+And the one which I am showing you here, that is a different one.
+
+19:02  
+This is the name like Tera Apollo test run.
+
+19:05  
+OK, Tera Apollo test run.
+
+19:07  
+This is the different one.
+
+19:08  
+Just for example purpose.
+
+19:10  
+I showed you immediately I was that this jobs was open here That is why I showed you that is it nothing is more than that OK, but if I will let us let us let me take you to the actual job.
+
+19:22  
+Do not get confused here better I will This is my production jobs Yeah, one second See we we have started our discussion from workflow.
+
+19:30  
+OK, I will go to the workflow side once again I have this workflow option.
+
+19:35  
+I mean inside the workflow now I will search my jobs.
+
+19:38  
+So my job name is this one.
+
+19:41  
+OK, I have copied that name and I need to go to each tab Yeah, this 1I have pasted that name here.
+
+19:48  
+It will filter my job.
+
+19:50  
+So this 1I will open it.
+
+19:53  
+Yeah, So today.
+
+19:55  
+Yeah correct.
+
+19:57  
+So today it got succeeded.
+
+19:58  
+So see if you can see 16th of September, it got succeeded.
+
+20:02  
+OK, so.
+
+20:03  
+I will go inside this inside this, Yeah, see actually this job got failed on weekend Saturdays, OK, it got failed, then it got fixed immediately and then it got ran.
+
+20:15  
+So I will go to the last candle like today's, today's ran.
+
+20:20  
+Yeah, nowhere.
+
+20:20  
+You can check Riyaz like I can have those parameter whichever I showed you Where is that see let me let me Scroll down yeah, see here.
+
+20:37  
+Now if you can compare this variable.
+
+20:40  
+So here also this is the same one OK DB host, DB name inside the DB name I have given only 2 variables DB name see stage and prod OK and default I am selecting the stage which is nothing but my my dev.
+
+20:54  
+But later on I am I am giving this prod value.
+
+20:58  
+So from where I am giving this prod value, see here DB name, it has taken prod and it is overwrite, correct?
+
+21:05  
+Everywhere it is getting overwrite.
+
+21:06  
+OK.
+
+21:07  
+So from where it is, it is reading this prod 5439 this value, this value it is reading from that Jason file which I will show you later.
+
+21:18  
+From that Jason file, it will read this value, this parameter OK, up to this any yeah, OK.
+
+21:29  
+So this is what the workflow inside.
+
+21:31  
+So what I mean to tell you like inside the workflow I can I can show you like all the jobs which has been deployed from the prod side and I can I can check any jobs like whether these jobs got succeeded or not.
+
+21:48  
+Like likewise the the UI will get open and I can check the locks of any any jobs like on previous days as well.
+
+21:56  
+Let us say on previous day what was the cluster types and those things I I can click on previous candle and I can go down see on that day this was my cluster configuration.
+
+22:06  
+Actually we have fixed this.
+
+22:08  
+It is not getting changed everyday.
+
+22:10  
+OK during deployment only we have given this kind of parameter.
+
+22:14  
+So it will keep all those things.
+
+22:15  
+But let us say in between somewhere I change the configuration cluster configurations.
+
+22:20  
+So we can check like today what is my cluster configuration month ago what was the cluster configuration something like that we can check from this candle run.
+
+22:30  
+OK, if I will go to 5th of September, lets say run.
+
+22:36  
+So how much time it it took?
+
+22:38  
+So yeah so 38 minute on that day.
+
+22:39  
+So cluster configuration was this one again same.
+
+22:44  
+OK which parameter it took same parameter again on the bottom side.
+
+22:47  
+If I will Scroll down again again, yeah, nothing is there but see if I want to check You know guys like you have worked on 5 Spark, right.
+
+22:55  
+So from the Spark side there is a there is a UI Spark UI, correct.
+
+23:02  
+So where we can check that Spark UI?
+
+23:04  
+So here only we can have it if we scroll up now cluster configurations compute details yeah So inside the compute, now there is a matrix.
+
+23:12  
+So these all these things matrix locks Spark UI and view details.
+
+23:17  
+OK, so I can check my Spark UI, I can check my matrix everything I can check this if we if we click on view details, it will give me all the details of my cluster which cluster I am using OK, so let me let me open it.
+
+23:30  
+So this is so called the job cluster.
+
+23:32  
+This is the cluster created during the runtime.
+
+23:36  
+So during the runtime industry it is my job cluster and we have some cluster we have some cluster as well.
+
+23:41  
+See let me navigate to here OK.
+
+23:44  
+And see this is some of the cluster as of now I have connected with this IIBI developer prod Unity OK.
+
+23:52  
+So this cluster is my integrate interactive cluster.
+
+23:56  
+We can see this is interactive cluster.
+
+23:58  
+This is this is my interactive cluster.
+
+24:00  
+This is interactive cluster, this is also interactive cluster.
+
+24:03  
+So this 3 to 4 clusters this peoples has given to us for our testing purpose OK Like this HP people have have created this kind of cluster IIBI developer Prod A M this is for testing purpose OK.
+
+24:20  
+And we have also we we can also create our own cluster.
+
+24:24  
+If once I will go to computer then that time I will I will talk about this.
+
+24:29  
+But see I have a multiple cluster out of that I have selected the prod unity IIML this cluster OK so this is my interactive cluster and this is my job cluster which will create during the runtime of my jobs.
+
+24:44  
+Let me let me go to that tab.
+
+24:48  
+This bar is there sharing bar is there yeah.
+
+24:53  
+So this is my interactive sorry.
+
+24:55  
+This is my job cluster which will create during the runtime.
+
+24:57  
+If will if I will go inside this view details, then it will show me all the details property of that cluster.
+
+25:04  
+What is this CPU, how many CPU, how many DPO core?
+
+25:07  
+What is my driver notes, worker worker notes, how many number of worker notes I am using all those things.
+
+25:14  
+I will get it here see Okay so which spark version I am using like spark 3 point O and 14.2 version.
+
+25:23  
+I am using the latest one OK again if I Scroll down the worker type is M7 see there there are I need to go to the edit option then it will show me so I can select any worker type M7 R7 there is a series now MRRX 2X large 2X large that kind of series is there.
+
+25:45  
+You know about it, yes yes, yeah, yeah.
+
+25:50  
+And here if you can see here, I have decided the worker notes, the maximum is 5 minimum is one.
+
+25:56  
+OK, then see here.
+
+25:58  
+If I Scroll down, there is some advanced option also some.
+
+26:01  
+What are the libraries we have used?
+
+26:03  
+OK, those kind of things.
+
+26:04  
+I will get it here in the view details option.
+
+26:07  
+Now in the same tab also I can go to I can go to Spark UI or Matrix and this option, this thing, this kind of option, I will get it from here as well.
+
+26:17  
+If I will go back now see I was here from view details, from view details option, I got this one.
+
+26:25  
+So from this one also I can access my Sparky Y or my matrix option which I can get it from backside option Sparky Y or matrix.
+
+26:33  
+If I will Click to the matrix again, it will go to the same page.
+
+26:37  
+Whichever this option I will get it matrix.
+
+26:41  
+OK So inside the matrix I will get all those CPU, CPU utilizations, memory utilizations, worker not utilization.
+
+26:49  
+So see once this jobs my today's job got ran how many CPU it has used out of 100%.
+
+26:56  
+So maximum it it maximum it has used.
+
+26:59  
+Let me scrolled up what is this?
+
+27:05  
+It is not getting see at this point how many CPU user user is 73% at this point the highest is 73.
+
+27:18  
+OK, so I will take you to the downside.
+
+27:22  
+Yeah, see 75% memory it has used out of 100% clear.
+
+27:27  
+Yes, yes, this is the internal.
+
+27:33  
+So this is the internal how much Spark is working those things we can check it here.
+
+27:37  
+So again, next is like memory utilization, how much memory it has used.
+
+27:41  
+So green part is for cache, blue is for used how much memory it has used.
+
+27:47  
+So around around see how what is the used 6 yeah, 6.39 GB it has used total was 7 point this much, this much OK 7.59 GB out of that cache was very minimum OK.
+
+28:06  
+And later on it was used something green colour and blue coloured again if I go down memory swap utilization is there.
+
+28:14  
+I need I can check how many worker nodes it has used out of you know out of 5 worker nodes I have I showed you here in configurations block how many worker nodes, worker types, sorry worker notes we have given maximum is 5.
+
+28:29  
+So out of those 5, how many it has used it.
+
+28:32  
+I will get it in the metric side if I will Scroll down, down, down.
+
+28:36  
+Yeah, so number of active nodes.
+
+28:38  
+So somewhere it is using maximum at 6:00.
+
+28:43  
+OK maximum.
+
+28:44  
+So you should not get confused like if we have decided 5 and how it is using 6, right.
+
+28:50  
+This is something technical question which most of the most of the interviewer asked during our interview times.
+
+28:56  
+So it will use the driver notes as well.
+
+28:58  
+OK, that is the 6th node.
+
+29:01  
+So if I will show you here, you know let me show configurations.
+
+29:06  
+Yeah, so worker type I am giving 5 worker types, I am giving 5 and driver also I have given one more, right.
+
+29:15  
+So this is driver is also using so driver the the 6th one is the driver.
+
+29:20  
+That is what we can see it here.
+
+29:22  
+That is how it is using the 6th one.
+
+29:25  
+OK, so yeah so from this one we will get an idea like all those 5 worker notes is completely utilising this thruster.
+
+29:35  
+So no need to worry if something like we have this, we have defined 20 worker notes but out of 20 it is only using 10 worker notes.
+
+29:43  
+So then it is then it is waste to use 20, right?
+
+29:47  
+Rest of them are 10 worker notes or simply sitting idle.
+
+29:50  
+So we can reduce the cluster configuration.
+
+29:52  
+We can say that up to 10.
+
+29:54  
+That is how this is for that kind of purpose.
+
+29:56  
+We can check all those metrics here and based on that matrix we can decide we can fix our clustered cluster configuration.
+
+30:03  
+That is what again we can go to the Spark UI option and then here we can check all the Spark internal behaviour like how many jobs got created, what are the stages, what, how, how the dags will looks like, all those things you might have heard about this thing during your preparation times.
+
+30:22  
+So see this is my job ID.
+
+30:24  
+If I will go inside the job ID so I will get something to dag OK, So see it will create this much of task.
+
+30:32  
+All all those things it will I will show you.
+
+30:34  
+I will get it here.
+
+30:35  
+OK, so these are my stages.
+
+30:38  
+How many stages it has created?
+
+30:41  
+Yeah.
+
+30:42  
+So how many stages?
+
+30:43  
+See this much of total stages has created 617.
+
+30:47  
+OK, if I will go to the next or next like this SQL data from Yeah, I will go to the SQL data from side.
+
+30:53  
+So here I will get all those things like SQL queries.
+
+30:59  
+You know how to check this DAG, right?
+
+31:01  
+This is how my DAG will get create here for that recent descriptions.
+
+31:08  
+Let me check this sub ID OK you you just explore this so you will get all those idea about it.
+
+31:21  
+This is my something physical plan those things these thing I will get it from everything here.
+
+31:26  
+OK, let me go to the job option.
+
+31:35  
+Let me go down in between some any and all the jobs.
+
+31:50  
+Vitra computer count of a tune.
+
+32:12  
+Not here actually.
+
+32:13  
+I just wanted to show you the Dags, you know how to how to check the DAG, right?
+
+32:20  
+Yes, yes, yeah, yeah.
+
+32:23  
+So that is it.
+
+32:24  
+See this is how the DAG will get created for this particular operations.
+
+32:28  
+So all this Spark internal things, we can check it from this Spark UI option.
+
+32:32  
+So everything is available on this database.
+
+32:34  
+No need to.
+
+32:35  
+If we go with some other ID let us say we do not have this database.
+
+32:38  
+We have adopted any other cloud platform like AWS blue.
+
+32:44  
+Blue is one more idea.
+
+32:45  
+You know where we can write our 5 spark job.
+
+32:47  
+So in AWS blue side, you know it's very difficult to check those park UI.
+
+32:51  
+We need to take help of some other 3rd party tool and we have we need to define one port like 8080 from that port we need to enable it and then from that port we can check this park UI.
+
+33:02  
+But if we go towards this data breaks, everything is there inside it only, OK.
+
+33:07  
+For that purpose, database is very handy, very popular that is what?
+
+33:12  
+So we have seen this workflow option.
+
+33:16  
+I hope it is clear.
+
+33:16  
+I have doubt.
+
+33:18  
+Yeah, yeah, please.
+
+33:20  
+Actually if I mean in the day end, what will doing that?
+
+33:24  
+We will be logging off from the database also, right.
+
+33:27  
+So in that scenario, the cluster will be terminated if we logout.
+
+33:30  
+So are we terminating the cluster after completing the job?
+
+33:34  
+No, no, no.
+
+33:35  
+We are not doing those things.
+
+33:36  
+See once we once we deploy our jobs, you know for production sites, OK, then during that time cluster will be created during runtime only Let us say, see this jobs is running everyday, this jobs is getting failed something this job.
+
+33:51  
+Let me go to this, this jobs, OK?
+
+33:54  
+Actually you know we have start if we have started this this jobs now something time back now, then it was very good.
+
+34:03  
+See once let us say tomorrow this candle here one, one candle, I will get it new candle.
+
+34:08  
+So during first 5 to 10 minutes.
+
+34:11  
+Now this compute option is like it will get running and it there is a clear cut message.
+
+34:16  
+It has been written here.
+
+34:18  
+Cluster will get update, a cluster will be created, something message will be written here.
+
+34:23  
+So this cluster will be created during runtime.
+
+34:26  
+We do not need to worry whether this cluster needs to be active state or we need to we need to make it disable or unable all those things.
+
+34:35  
+We do not need to worry for that.
+
+34:37  
+Purposely we have given this kind of specifications like I need to create a cluster with this configurations and this cluster should be created during the runtime of the job that is so called as the job cluster.
+
+34:48  
+But if we come here, if we come here, let us say this is my development notebook.
+
+34:56  
+But here we need to we need to add a interactive cluster.
+
+35:02  
+OK, I need to add the interactive cluster then it will take some 5 minutes to connect it.
+
+35:08  
+But it is not mandatory to to you know, disconnect the cluster or or cancel the cluster like this.
+
+35:14  
+Once we close this tab, it will get closed automatically.
+
+35:17  
+It will get disconnected automatically.
+
+35:20  
+Is this your questions?
+
+35:22  
+Am I answered your questions or what?
+
+35:25  
+Yes, yes.
+
+35:26  
+Bye.
+
+35:26  
+And one more thing when we are creating the new job now, so are we creating the new club again at that?
+
+35:32  
+No, no, so no.
+
+35:34  
+So let me tell you OK, let me go to that next option then I will answer this questions.
+
+35:41  
+OK.
+
+35:41  
+Any other any other things here?
+
+35:46  
+Any other questions apart from that?
+
+35:48  
+No, no.
+
+35:49  
+OK, so this is what OK, let me go to I was in workflow option.
+
+35:55  
+OK, this workflow, sorry, let me go to this tab.
+
+36:03  
+Sometimes this screen sharing option is very killing our time.
+
+36:06  
+Yeah.
+
+36:07  
+Now I was explaining to you workflow option.
+
+36:10  
+So inside the workflow we have seen inside this workflow, we have seen job.
+
+36:16  
+What is there?
+
+36:17  
+OK, so we can filter out our jobs, we can monitor our jobs.
+
+36:21  
+So, so it is like, you know, it is like someday let us say on you know, on Saturday my job got failed on Saturday I told you right, My job got failed.
+
+36:32  
+This one I I CRM yes, yes, yeah, yeah.
+
+36:37  
+So you know Pooja, Pooja pinged me like she got notifications about this jobs on Saturday 14th of September.
+
+36:45  
+Like this IRCRM job got failed and this jobs developed by me actually.
+
+36:50  
+So she immediately pinged me and called me on my phone and saying like this job got failed PK if you can possible may be monitor check it where it is failing and if you can fix it may be fixed it.
+
+37:00  
+Since this job is very important.
+
+37:02  
+So where I have checked it directly once I log in to my my PC my laptops directly I have open data fix and I I went to this workflow option and I filter my jobs and I checked oh it got failed.
+
+37:14  
+Now how to check it where it got failed?
+
+37:16  
+I again go to this candle then I it will open the code and here it will show the message.
+
+37:25  
+See unsupported operation exception delta multiple source to or something something.
+
+37:29  
+It is giving me the option again at what cell it is failing.
+
+37:33  
+So I need to click here highlight error.
+
+37:36  
+So once I click highlight error it will go here it will go to it will navigate me to the actual cell where it is failing.
+
+37:43  
+So see in my code in my notebook, I am performing some merge operations, some merge operation on the Unity table on the Delta table.
+
+37:52  
+So it is giving me an error like an error like there is some column duplicacy something, something it is giving me the error.
+
+38:00  
+If you can scroll up now see let me let me scroll.
+
+38:03  
+See here we have this option.
+
+38:05  
+We can make it large the screen.
+
+38:07  
+OK, yeah.
+
+38:09  
+So see it was giving me the error like error what is it cannot perform the merge on the multiple source column.
+
+38:15  
+So there was a issue like in source and target table some some duplicate keys was there.
+
+38:20  
+So that is why I identified I have fixed, I have given a fix and then I I manually ran it.
+
+38:25  
+Then this script, this particular I manually ran it.
+
+38:27  
+I have not triggered it from here again I have not went to jobs and I have not triggered it.
+
+38:31  
+Once again I manually ran it that is it.
+
+38:33  
+Then during the next run, it got succeeded.
+
+38:37  
+OK, you got it.
+
+38:38  
+How to check whether my job got failed or something, something.
+
+38:41  
+So from this one, from this workflow option, we can monitor whether my job is running fine or not.
+
+38:47  
+If somehow it got failed, I need to go to the workflow option and then just check it where it is failing.
+
+38:53  
+Because of what reason is failing, we need to go to the failed option.
+
+38:56  
+We need to go to the failed option.
+
+38:58  
+Failed option in the sense failed candle.
+
+39:01  
+OK, once again, I will repeat.
+
+39:02  
+And we need to check where it is failing.
+
+39:04  
+So it is giving me the error.
+
+39:06  
+Go to the highlighted error and it will navigate to the actual sale where it is failing.
+
+39:11  
+This is the sale where it is failing.
+
+39:12  
+That is what OK, so this is what about the jobs?
+
+---
+
+*Content truncated for brevity. (The full transcript continues with detailed Q&A, repository management, cluster configuration, and Databricks platform usage as extracted above.)*
